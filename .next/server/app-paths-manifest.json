@@ -1,0 +1,5 @@
+{
+  "/api/rp-signature/route": "app/api/rp-signature/route.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/page": "app/page.js"
+}
