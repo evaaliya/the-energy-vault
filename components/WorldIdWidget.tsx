@@ -19,7 +19,7 @@ export default function WorldIdWidget({ onVerify }: { onVerify: () => void }) {
       .then((rpSig) => {
         if (rpSig.sig) {
           setRpContext({
-            rp_id: "rp_dummy_for_hackathon", // mock RP ID
+            rp_id: rpSig.rp_id || "rp_dummy_for_hackathon", // Use real RP ID if available
             nonce: rpSig.nonce,
             created_at: rpSig.created_at,
             expires_at: rpSig.expires_at,
@@ -44,7 +44,7 @@ export default function WorldIdWidget({ onVerify }: { onVerify: () => void }) {
         <IDKitRequestWidget
           open={open}
           onOpenChange={setOpen}
-          app_id="app_staging_123" // Replace with real app ID
+          app_id={(process.env.NEXT_PUBLIC_WORLD_APP_ID as `app_${string}`) || "app_staging_123"} // Read from .env.local
           action="register-agent"
           rp_context={rpContext}
           allow_legacy_proofs={true}

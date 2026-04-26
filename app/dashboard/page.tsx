@@ -8,6 +8,11 @@ export default function DashboardPage() {
   // State for MVP
   const [isWorldIdVerified, setIsWorldIdVerified] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+
+  // State for AI Chat
+  const [askMessage, setAskMessage] = useState("");
+  const [askResponse, setAskResponse] = useState<string | null>(null);
+  const [isAsking, setIsAsking] = useState(false);
   
   // New Mock Metrics
   const agentsCount = 12;
@@ -81,6 +86,12 @@ export default function DashboardPage() {
               <div>
                 <div className="text-lg font-bold text-slate-500 mb-2">Not Verified</div>
                 <WorldIdWidget onVerify={() => setIsWorldIdVerified(true)} />
+                <button 
+                  onClick={() => setIsWorldIdVerified(true)}
+                  className="w-full mt-2 py-2 text-xs font-medium text-slate-500 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-dashed border-slate-600"
+                >
+                  (Demo) Bypass Verification
+                </button>
               </div>
             )}
           </div>
@@ -109,6 +120,74 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Ask Agent Section */}
+      {isWorldIdVerified && (
+        <div className="p-8 bg-slate-800/40 border border-slate-700/50 rounded-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+          <h3 className="text-xl font-bold mb-4 text-white relative z-10 flex items-center gap-2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Ask Network Agent (AI)
+          </h3>
+          <div className="flex gap-4 relative z-10">
+            <input 
+              type="text" 
+              value={askMessage}
+              onChange={(e) => setAskMessage(e.target.value)}
+              placeholder="Ask the agent anything about its operations..."
+              className="flex-1 bg-slate-900/50 border border-slate-700/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
+              onKeyDown={async (e) => {
+                if (e.key === 'Enter' && askMessage.trim() && !isAsking) {
+                  setIsAsking(true);
+                  try {
+                    const res = await fetch("/api/agent/chat", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ message: askMessage, creditScore: 100, useAI: true })
+                    });
+                    const data = await res.json();
+                    setAskResponse(data.reply);
+                    setAskMessage("");
+                  } catch (e) {
+                    console.error(e);
+                  } finally {
+                    setIsAsking(false);
+                  }
+                }
+              }}
+            />
+            <button 
+              onClick={async () => {
+                if (!askMessage.trim()) return;
+                setIsAsking(true);
+                try {
+                  const res = await fetch("/api/agent/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: askMessage, creditScore: 100, useAI: true })
+                  });
+                  const data = await res.json();
+                  setAskResponse(data.reply);
+                  setAskMessage("");
+                } catch (e) {
+                  console.error(e);
+                } finally {
+                  setIsAsking(false);
+                }
+              }}
+              disabled={isAsking || !askMessage.trim()}
+              className="px-6 py-3 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-[0_0_20px_-5px_rgba(168,85,247,0.5)]"
+            >
+              {isAsking ? "Thinking..." : "Ask Agent"}
+            </button>
+          </div>
+          {askResponse && (
+            <div className="mt-4 p-4 bg-purple-500/10 border border-purple-500/20 rounded-xl relative z-10">
+              <div className="text-sm font-medium text-purple-100">🤖 Agent: {askResponse}</div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Agents List Section */}
       <div className="pt-6">

@@ -5,8 +5,9 @@ export async function POST(request: Request) {
   try {
     const { action } = await request.json();
 
-    // Use a mock signing key for the MVP if env var is missing
-    const signingKeyHex = process.env.RP_SIGNING_KEY || "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+    // Use real signing key from env if available
+    const signingKeyHex = process.env.WORLD_ID_RP_SECRET || process.env.RP_SIGNING_KEY || "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+    const rp_id = process.env.WORLD_ID_RP_ID || "rp_dummy_for_hackathon";
 
     const { sig, nonce, createdAt, expiresAt } = signRequest({
       signingKeyHex,
@@ -14,6 +15,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({
+      rp_id,
       sig,
       nonce,
       created_at: createdAt,

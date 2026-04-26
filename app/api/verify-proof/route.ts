@@ -6,7 +6,7 @@ export async function POST(request: Request) {
 
     // For Hackathon Demo: If no real app ID is configured, we bypass verification
     // and assume it's valid so the demo flows smoothly without setting up World App.
-    if (!process.env.RP_SIGNING_KEY) {
+    if (!process.env.WORLD_ID_RP_SECRET && !process.env.RP_SIGNING_KEY) {
       console.log("[MOCK] World ID verification successful");
       return NextResponse.json({ success: true });
     }
