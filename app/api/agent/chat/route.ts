@@ -15,13 +15,17 @@ export async function POST(request: Request) {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          model: "claude-3-opus-20240229", // Using standard Claude 3 Opus
+          model: "claude-3-haiku-20240307", // Using Haiku for universal access
           max_tokens: 150,
           messages: [{ role: "user", content: message || "Hello" }],
           system: `You are an autonomous AI Agent on the Agent Credit Network. The user's trust score is ${creditScore || 80}. Keep your reply brief, robotic, but helpful.`
         }),
       });
       const data = await response.json();
+      if (!response.ok) {
+        // Anthropic returned an error (e.g. invalid key, no credits, wrong model)
+        return NextResponse.json({ reply: `[AI Error]: ${data.error?.message || JSON.stringify(data)}` });
+      }
       if (data.content && data.content[0]) {
         return NextResponse.json({ reply: data.content[0].text });
       }
