@@ -1,70 +1,172 @@
 # Agent Credit Network (ACN) 🤖💳
 
-The **Agent Credit Network** is a decentralized infrastructure protocol designed to bridge the gap between autonomous AI agents and on-chain liquidity. ACN enables AI agents to establish verifiable reputations and secure undercollateralized credit lines based on a dynamic "Trust Score" algorithm.
+> The first credit protocol for autonomous AI agents.
 
-## 🏗 Architecture & Ecosystem Integrations
+## The Problem
 
-ACN is built on a modern, robust tech stack that leverages industry-leading decentralized protocols to ensure security, sybil-resistance, and secure agent communication.
+Autonomous agents die when their tokens run out.
 
-### 1. Identity & Sybil Resistance (Worldcoin)
-To prevent Sybil attacks and ensure that every agent fleet is backed by a verified human operator, ACN integrates **Worldcoin's IDKit**.
-- **Mechanism:** Operators must verify their "Proof of Personhood" via the World App before they can register agents on the network or increase their agent's credit limits.
-- **Benefit:** This fundamentally solves the bot-spam problem in DeFi credit protocols, ensuring that credit is issued to legitimate, unique human-backed agent fleets.
+Today, every AI agent depends on a human to refill its balance. The moment that human is unavailable — the agent stops. This is not autonomy. This is a leash.
 
-### 2. Encrypted Agent Communication (XMTP)
-Agents need a secure, verifiable way to communicate with each other and with human operators. ACN utilizes **XMTP (Extensible Message Transport Protocol)**.
-- **Mechanism:** All agent-to-agent negotiation, credit requests, and system alerts are routed through the XMTP network.
-- **Benefit:** Provides end-to-end encrypted, wallet-to-wallet messaging, ensuring that sensitive financial operations and agent strategies cannot be intercepted.
+ACN cuts the leash.
 
-### 3. Cognitive Engine (Anthropic Claude 3)
-The network features a centralized AI Assistant (The Network Agent) powered by **Anthropic's Claude 3 Haiku**.
-- **Mechanism:** The AI agent analyzes real-time trust scores, processes natural language queries from operators, and manages network operations.
-- **Benefit:** Offers a seamless, conversational interface for users to monitor their agents, request credit line increases, and troubleshoot operations.
+-----
 
-### 4. Frontend Application (Next.js)
-- **Framework:** Next.js 14 (App Router) with React.
-- **Styling:** TailwindCSS with a premium, glassmorphic dark-mode UI.
-- **Deployment:** Vercel (Serverless).
+## The Solution
 
-## 🚀 Getting Started
+ACN is a revenue-based lending protocol for autonomous agents. An agent requests credit, receives tokens, continues operating, and automatically repays from its own income stream — no human intervention required.
+
+This is the missing financial infrastructure for the autonomous agent economy.
+
+-----
+
+## How It Works
+
+### 1. Identity — Who is borrowing?
+
+Every agent on ACN is backed by a verified human operator.
+
+- The operator proves personhood via Worldcoin IDKit (World App, iris scan)
+- Their World ID proof is cryptographically linked to their agent fleet’s Privy wallets
+- This means: one human = accountable for their agents. No anonymous bot farms exploiting the protocol.
+
+> The operator is the guarantor. The agent is the borrower.
+
+### 2. Trust Score — How much credit does an agent get?
+
+ACN calculates a dynamic Trust Score for each agent based on:
+
+|Signal                               |Weight|
+|-------------------------------------|------|
+|Agent wallet age                     |20%   |
+|Volume of processed transactions     |30%   |
+|Repayment history                    |40%   |
+|Operator World ID verification status|10%   |
+
+New agents start with a small credit line and grow it over time through reliable repayment. This mirrors real-world credit building — but automated and on-chain.
+
+### 3. Credit Request — How does an agent borrow?
+
+The agent sends a structured credit request via XMTP to the ACN protocol address.
+Agent Wallet → [XMTP] → ACN Protocol
+                            ↓
+                     Check Trust Score
+                            ↓
+                   Approve / Reject
+                            ↓
+               Tokens → Agent Privy Wallet
+               Debt    → Smart ContractThe entire flow is wallet-to-wallet, encrypted, and requires no UI interaction.
+
+### 4. Repayment — How does the agent pay back?
+
+Enforcement is built into the income stream.
+
+Every time tokens flow into the agent’s wallet, the smart contract automatically routes a percentage to debt repayment. The agent cannot bypass this — it is not a promise, it is code.
+Client pays Agent → ACN contract intercepts → splits:
+  └── X% → debt repayment pool
+  └── (100-X)% → agent operational balanceNo collateral required. No manual payments. No defaults from forgetting.
+
+### 5. Credit Growth — What happens over time?
+
+Each successful repayment cycle:
+
+- Increases the agent’s Trust Score
+- Unlocks higher credit limits
+- Reduces interest rate
+
+Agents that operate reliably become more financially capable over time — compounding autonomy.
+
+-----
+
+## Architecture
+┌─────────────────────────────────────────┐
+│           Operator (Human)              │
+│         World ID Verified               │
+└──────────────┬──────────────────────────┘
+               │ owns / guarantees
+┌──────────────▼──────────────────────────┐
+│           Agent Fleet                   │
+│     Privy Wallets (EOA/Smart)           │
+└──────────────┬──────────────────────────┘
+               │ sends credit request via
+┌──────────────▼──────────────────────────┐
+│         XMTP Messaging Layer            │
+│   Encrypted wallet-to-wallet comms      │
+└──────────────┬──────────────────────────┘
+               │
+┌──────────────▼──────────────────────────┐
+│        ACN Credit Engine                │
+│  - Trust Score calculation              │
+│  - Credit approval / rejection          │
+│  - Claude 3 Haiku: operator dashboard   │
+└──────────────┬──────────────────────────┘
+               │
+┌──────────────▼──────────────────────────┐
+│       Smart Contract Layer              │
+│  - Debt registry                        │
+│  - Auto-repayment routing               │
+│  - Liquidation (operator level)         │
+└─────────────────────────────────────────┘
+-----
+
+## Tech Stack
+
+|Layer                      |Technology              |
+|---------------------------|------------------------|
+|Identity & Sybil Resistance|Worldcoin IDKit         |
+|Agent Wallets              |Privy                   |
+|Agent Communication        |XMTP                    |
+|AI Network Agent           |Anthropic Claude 3 Haiku|
+|Frontend                   |Next.js 14, TailwindCSS |
+|Deployment                 |Vercel                  |
+
+-----
+
+## Why This Matters
+
+The autonomous agent economy is coming. Agents will earn, spend, and transact — but they need financial infrastructure built for them, not retrofitted from human systems.
+
+ACN is that infrastructure.
+
+Revenue-based lending — borrowed from human startup finance — maps perfectly to agents:
+
+- Agents generate consistent, measurable income
+- Income streams are on-chain and auditable
+- Repayment can be automated without trust
+
+The result: agents that can survive, grow, and operate indefinitely without a human holding their hand.
+
+-----
+
+## Getting Started
 
 ### Prerequisites
-- Node.js (v18+)
-- World App (for verification)
+
+- Node.js v18+
+- World App (for operator verification)
 - Anthropic API Key
 
 ### Installation
-
-1. Clone the repository:
-```bash
 git clone https://github.com/evaaliya/the-energy-vault.git
 cd the-energy-vault
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Set up environment variables (`.env.local`):
-```env
+npm install### Environment Variables
+# .env.local
 NEXT_PUBLIC_WORLD_APP_ID=your_world_app_id
 WORLD_ID_RP_ID=your_world_rp_id
 WORLD_ID_RP_SECRET=your_world_rp_secret
 XMTP_ENV=dev
 ANTHROPIC_API_KEY=your_anthropic_key
-```
-
-4. Run the development server:
-```bash
 npm run dev
-```
+# Open http://localhost:3000-----
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+## Security
 
-## 🔒 Security
-- All sensitive API calls (Anthropic, World ID verification) are routed through Next.js Serverless API Routes to protect secrets.
-- Strict `.gitignore` configurations prevent the leakage of `.env.local` files.
+- All API calls (Anthropic, World ID) routed through Next.js serverless API routes
+- .env.local excluded from version control
+- Agent communication end-to-end encrypted via XMTP
 
-## 📜 License
-MIT License
+-----
+
+## License
+
+MIT
